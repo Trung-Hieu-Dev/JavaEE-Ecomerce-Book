@@ -162,7 +162,34 @@ public abstract class JpaDAO<T> {
 		}
 	}
 	
-	
+	public long getTotalRecord() {
+		Transaction transaction = null;
+		long totalRecord = 0;
+		
+		try (Session session = sessionFactory.openSession()) {
+			// start a transaction
+			transaction = session.beginTransaction();
+			
+			// get total record
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+			CriteriaQuery<Long> criteria = builder.createQuery(Long.class);
+			Root<T> root = criteria.from(_genericClass); ///  FROM User
+			criteria.select(builder.count(root)); /// select count(*)
+			
+			Query<Long> query = session.createQuery(criteria);
+			totalRecord = query.getSingleResult();
+			
+			// end transaction
+			transaction.commit();
+			
+		} catch (Exception e) {
+			if (transaction != null) {
+				transaction.rollback(); // do not save to db if not success
+			}
+			e.printStackTrace();
+		}
+		return totalRecord;
+	}
 	
 	
 	
