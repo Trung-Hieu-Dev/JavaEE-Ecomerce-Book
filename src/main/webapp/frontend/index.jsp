@@ -7,6 +7,6 @@
 <title>My Book Shop</title>
 </head>
 <body>
-	<h1>My Book shop</h1>
+	<h1>Welcome to Book Shop</h1>
 </body>
 </html>
