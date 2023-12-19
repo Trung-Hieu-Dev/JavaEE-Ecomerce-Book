@@ -1,0 +1,52 @@
+package com.ray.config;
+
+import java.util.Properties;
+
+import org.hibernate.SessionFactory;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.cfg.Environment;
+import org.hibernate.service.ServiceRegistry;
+
+public class HibernateSessionFactoryConfig {
+	private static SessionFactory sessionFactory;
+	
+	public static SessionFactory getSessionFactory() {
+		if (sessionFactory == null) {
+			try {
+				// setting properties
+				Properties settings = new Properties();
+				settings.put(Environment.DRIVER, "com.mysql.cj.jdbc.Driver");
+				settings.put(Environment.URL, "jdbc:mysql://localhost:3306/javaee_ebook?useSSL=false");
+				settings.put(Environment.USER, "root");
+				settings.put(Environment.PASS, "");
+				settings.put(Environment.DIALECT, "org.hibernate.dialect.MySQLDialect");
+				
+				// show mysSQL statements on console
+				settings.put(Environment.SHOW_SQL, "true");
+				
+				// allow to get current session
+				settings.put(Environment.CURRENT_SESSION_CONTEXT_CLASS, "thread");
+				
+				// apply setting properties to hibernate
+				Configuration configuration = new Configuration();
+				configuration.setProperties(settings);
+				
+				// add annotation class
+//				configuration.addAnnotatedClass(null);
+				
+				// build session factory
+				ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
+						.applySettings(configuration.getProperties()).build();
+				
+				sessionFactory = configuration.buildSessionFactory(serviceRegistry);
+				return sessionFactory;
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return sessionFactory;
+	}
+
+}
