@@ -3,9 +3,14 @@ package com.ray.dao;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 
 import com.ray.config.HibernateSessionFactoryConfig;
 
@@ -40,7 +45,7 @@ public abstract class JpaDAO<T> {
 			
 		} catch (Exception e) {
 			if (transaction != null) {
-				transaction.rollback(); // do not save to db
+				transaction.rollback(); // do not save to db if not success
 			}
 			e.printStackTrace();
 		}
@@ -63,7 +68,7 @@ public abstract class JpaDAO<T> {
 			
 		} catch (Exception e) {
 			if (transaction != null) {
-				transaction.rollback(); // do not save to db
+				transaction.rollback(); // do not save to db if not success
 			}
 			e.printStackTrace();
 		}
@@ -91,7 +96,7 @@ public abstract class JpaDAO<T> {
 			
 		} catch (Exception e) {
 			if (transaction != null) {
-				transaction.rollback(); // do not save to db
+				transaction.rollback(); // do not save to db if not success
 			}
 			e.printStackTrace();
 		}
@@ -100,10 +105,65 @@ public abstract class JpaDAO<T> {
 	
 	// find all
 	public List<T> finAll() {
-		return null;
+		Transaction transaction = null;
+		List<T> objectList = null;
+		
+		try (Session session = sessionFactory.openSession()) {
+			// start a transaction
+			transaction = session.beginTransaction();
+			
+			// get list
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+			CriteriaQuery<T> criteria = builder.createQuery(_genericClass); ///_genericClass = User.class
+			Root<T> root = criteria.from(_genericClass); ///  FROM User
+			criteria.select(root); /// select * 
+			
+			Query<T> query = session.createQuery(criteria);
+			objectList = query.getResultList();
+			
+			// end transaction
+			transaction.commit();
+			
+		} catch (Exception e) {
+			if (transaction != null) {
+				transaction.rollback(); // do not save to db if not success
+			}
+			e.printStackTrace();
+		}
+		return objectList;
 	}
 	
 	// delete
-	public void delete(T obj) {}
+	public void delete(T objId) {
+		Transaction transaction = null;
+		Object queryObj = null;
+		
+		try (Session session = sessionFactory.openSession()) {
+			// start a transaction
+			transaction = session.beginTransaction();
+			
+			// get obj to delete
+			queryObj = session.get(_genericClass, (Serializable) objId);
+			
+			// delete
+			if (queryObj != null) {
+				session.delete(queryObj);
+				System.out.println("Delete succcessfully!");
+			}
+			
+			// end transaction
+			transaction.commit();
+			
+		} catch (Exception e) {
+			if (transaction != null) {
+				transaction.rollback(); // do not save to db if not success
+			}
+			e.printStackTrace();
+		}
+	}
+	
+	
+	
+	
 	
 }
