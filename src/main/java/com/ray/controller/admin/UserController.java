@@ -17,25 +17,35 @@ import com.ray.entity.User;
 @WebServlet("/admin/manage_user")
 public class UserController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private UserDAO userDAO;
        
     public UserController() {
         super();
+        this.userDAO = new UserDAO();
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// get data
-		UserDAO userDAO = new UserDAO();
 		List<User> userList = userDAO.finAll();
 		
 		// pass data to JSP file
 		request.setAttribute("userList", userList);
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher("user_list.jsp");
-		dispatcher.forward(request, response);	}
+		dispatcher.forward(request, response);	
+	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
+		String email = request.getParameter("email");
+		String fullName = request.getParameter("fullName");
+		String password = request.getParameter("password");
+		
+		User newUser = new User(email, password, fullName);
+		this.userDAO.insert(newUser);
+		
+		// redirect to user list
+		response.sendRedirect("manage_user");
+		
 	}
 
 }
