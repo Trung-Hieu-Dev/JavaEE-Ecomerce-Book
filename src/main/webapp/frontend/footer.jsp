@@ -3,14 +3,14 @@
 			<div class="container relative">
 
 				<div class="sofa-img">
-					<img src="images/sofa.png" alt="Image" class="img-fluid">
+					<img src="<%= pageContext.getServletContext().getInitParameter("baseUrl")%>/images/sofa.png" alt="Image" class="img-fluid">
 				</div>
 
 				<div class="row">
 					<div class="col-lg-8">
 						<div class="subscription-form">
 							<h3 class="d-flex align-items-center"><span class="me-1"><img
-										src="images/envelope-outline.svg" alt="Image"
+										src="<%= pageContext.getServletContext().getInitParameter("baseUrl")%>/images/envelope-outline.svg" alt="Image"
 										class="img-fluid"></span><span>Subscribe to Newsletter</span></h3>
 
 							<form action="#" class="row g-3">
@@ -33,7 +33,7 @@
 
 				<div class="row g-5 mb-5">
 					<div class="col-lg-4">
-						<div class="mb-4 footer-logo-wrap"><a href="#" class="footer-logo">Furni<span>.</span></a></div>
+						<div class="mb-4 footer-logo-wrap"><a href="#" class="footer-logo">EBook Shop<span>.</span></a></div>
 						<p class="mb-4">Donec facilisis quam ut purus rutrum lobortis. Donec vitae odio quis nisl
 							dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate velit imperdiet dolor tempor
 							tristique. Pellentesque habitant</p>
@@ -109,8 +109,9 @@
 			</div>
 		</footer>
 
-	<script src="../js/bootstrap.bundle.min.js"></script>
-	<script src="../js/tiny-slider.js"></script>
-	<script src="../js/custom.js"></script>
+	<script src="<%= pageContext.getServletContext().getInitParameter("baseUrl")%>/js/bootstrap.bundle.min.js"></script>
+	<script src="<%= pageContext.getServletContext().getInitParameter("baseUrl")%>/js/tiny-slider.js"></script>
+	<script src="<%= pageContext.getServletContext().getInitParameter("baseUrl")%>/js/custom.js"></script>
+	<script src="https://kit.fontawesome.com/edaea802af.js" crossorigin="anonymous"></script>
 </body>
 </html>

@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd" id="WebApp_ID" version="4.0">
   <display-name>Ecomerce_Book</display-name>
+  
+  <context-param>
+  	<param-name>baseUrl</param-name>
+  	<param-value>http://localhost:8080/Ecomerce_Book</param-value>
+  </context-param>
+  <context-param>
+  	<param-name>hostUrl</param-name>
+  	<param-value>http://localhost:8080</param-value>
+  </context-param>
+  
   <welcome-file-list>
     <welcome-file>index.jsp</welcome-file>
   </welcome-file-list>
