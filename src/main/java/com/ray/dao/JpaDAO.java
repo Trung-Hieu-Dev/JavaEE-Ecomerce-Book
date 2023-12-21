@@ -134,7 +134,7 @@ public abstract class JpaDAO<T> {
 	}
 	
 	// delete
-	public void delete(T objId) {
+	public void delete(Object objId) {
 		Transaction transaction = null;
 		Object queryObj = null;
 		

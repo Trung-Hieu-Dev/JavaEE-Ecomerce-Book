@@ -31,8 +31,8 @@ public class UserDAO extends JpaDAO<User> {
 	}
 
 	@Override
-	public void delete(User obj) {
-		super.delete(obj);
+	public void delete(Object objId) {
+		super.delete(objId);
 	}
 
 	@Override
