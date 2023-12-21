@@ -3,12 +3,27 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="ISO-8859-1">
+	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<!-- Bootstrap CSS -->
-		<link href="<%= pageContext.getServletContext().getInitParameter("baseUrl")%>/css/bootstrap.min.css" rel="stylesheet">
-		<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-		<link href="<%= pageContext.getServletContext().getInitParameter("baseUrl")%>css/tiny-slider.css" rel="stylesheet">
-		<link href="<%= pageContext.getServletContext().getInitParameter("baseUrl")%>/css/style.css" rel="stylesheet">
-		<link href="<%= pageContext.getServletContext().getInitParameter("baseUrl")%>/scss/style.scss" rel="stylesheet">
+
+	<!-- Google Web Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Raleway:wght@600;800&display=swap" rel="stylesheet"> 
+
+        <!-- Icon Font Stylesheet -->
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"/>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+        <!-- Libraries Stylesheet -->
+        <link href="<%= pageContext.getServletContext().getInitParameter("baseUrl")%>/lib/lightbox/css/lightbox.min.css" rel="stylesheet">
+        <link href="<%= pageContext.getServletContext().getInitParameter("baseUrl")%>/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+
+
+        <!-- Customized Bootstrap Stylesheet -->
+        <link href="<%= pageContext.getServletContext().getInitParameter("baseUrl")%>/css/bootstrap.min.css" rel="stylesheet">
+
+        <!-- Template Stylesheet -->
+        <link href="<%= pageContext.getServletContext().getInitParameter("baseUrl")%>/css/style.css" rel="stylesheet">
+	
 	<title>EBook Shop</title>
