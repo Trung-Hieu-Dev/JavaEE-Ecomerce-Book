@@ -103,5 +103,8 @@
 
     <!-- Template Javascript -->
     <script src="<%= pageContext.getServletContext().getInitParameter("baseUrl")%>/js/main.js"></script>
+    
+    <!-- Font awesome -->
+    <script src="https://kit.fontawesome.com/edaea802af.js" crossorigin="anonymous"></script>
 </body>
 </html>
