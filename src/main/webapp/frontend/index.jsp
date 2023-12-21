@@ -5,10 +5,12 @@
 	
 	<%@include file="dialog.jsp" %>
 	
+	<%@include file="hero.jsp" %>
+	
+	<%@include file="feature.jsp" %>
+	
 	<!-- End Header/Navigation -->
-	<div class="container py-5">
-		Main content
-	</div>
+	<%@include file="shop.jsp" %>
 	
 	
 <%@include file="footer.jsp" %>
