@@ -8,6 +8,9 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.cfg.Environment;
 import org.hibernate.service.ServiceRegistry;
 
+import com.ray.entity.Category;
+import com.ray.entity.Customer;
+import com.ray.entity.Product;
 import com.ray.entity.User;
 
 public class HibernateSessionFactoryConfig {
@@ -36,6 +39,9 @@ public class HibernateSessionFactoryConfig {
 				
 				// add annotation class
 				configuration.addAnnotatedClass(User.class);
+				configuration.addAnnotatedClass(Product.class);
+				configuration.addAnnotatedClass(Category.class);
+				configuration.addAnnotatedClass(Customer.class);
 				
 				// build session factory
 				ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
