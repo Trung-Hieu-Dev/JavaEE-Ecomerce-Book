@@ -1,6 +1,9 @@
 <div class="container py-5">
 	<div class="d-flex justify-content-between align-items-center">
-		<img alt="logo" src="<%= pageContext.getServletContext().getInitParameter("baseUrl")%>/img/logo.png">
+		<a href="<%= pageContext.getServletContext().getInitParameter("baseUrl")%>/admin">
+			<img alt="logo" src="<%= pageContext.getServletContext().getInitParameter("baseUrl")%>/img/logo.png">
+		</a>
+		
 
 		<div class="d-flex justify-content-end vw-50">
 			Welcome, Admin
