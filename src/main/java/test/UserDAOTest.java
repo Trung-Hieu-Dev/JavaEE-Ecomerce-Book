@@ -54,5 +54,12 @@ class UserDAOTest {
 		
 		assertTrue(Objects.isNull(userDAO.findOne(13)));
 	}
+	
+	@Test
+	void testGetUserByEmail() {
+		User user = userDAO.getUserByEmail("ray@email.com");
+		assertNotNull(user);
+	}
+	
 
 }

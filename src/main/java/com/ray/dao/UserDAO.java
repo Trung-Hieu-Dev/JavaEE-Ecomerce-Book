@@ -40,6 +40,16 @@ public class UserDAO extends JpaDAO<User> {
 		return super.getTotalRecord();
 	}
 
+	public User getUserByEmail(String email) {
+		List<User> userList = super.getNamedQueryWithParam("User.HQL.findByEmail", email);
+		
+		if(userList != null && userList.size() >= 1) {
+			return userList.get(0);
+		}
+		
+		return null;
+	}
+
 	
 	
 }
