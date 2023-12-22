@@ -12,7 +12,19 @@
 	</c:if>
 
 	<div class="container py-5">
-		<h1 class="text-center mb-4">Create New User</h1>
+		<c:if test="${theUser == null}">
+			<c:url var="actionLink" value="manage_user">
+				<c:param name="command" value="INSERT"/>
+			</c:url>
+			<h1 class="text-center mb-4">Create New User</h1>
+		</c:if>
+		
+		<c:if test="${theUser != null}">
+			<c:url var="actionLink" value="manage_user">
+				<c:param name="command" value="UPDATE"/>
+			</c:url>
+			<h1 class="text-center mb-4">Update User</h1>
+		</c:if>
 		<hr class="mx-auto" style="width:50%;">
 
 		<h2 class="text-center">Quick action</h2>
@@ -21,9 +33,6 @@
 		</div>
 		<hr class="mx-auto" style="width:50%;">
 		
-		<c:url var="actionLink" value="manage_user">
-			<c:param name="command" value="INSERT"/>
-		</c:url>
 		
 		<div class="d-flex flex-column align-items-center py-5">
 			<form action="${actionLink}" method="post" 
@@ -59,8 +68,11 @@
 				  />
 				  <label for="inputUserPassword">Password</label>
 				</div>
+				<c:if test="${theUser != null}">
+					<input type="hidden" name="userId" value="${theUser.userId}" />
+				</c:if>
 				<div class="d-flex justify-content-center">
-					<button type="submit" class="btn btn-primary mt-4 w-50">Create</button>
+					<button type="submit" class="btn btn-primary mt-4 w-50">Submit</button>
 				</div>
 			</form>
 		</div>
