@@ -9,6 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.ray.dao.UserDAO;
 import com.ray.entity.User;
@@ -38,6 +39,9 @@ public class UserController extends HttpServlet {
 			case "LIST":
 				getUserList(request, response);
 				break;
+			case "NEW":
+				showNewForm(request, response);
+				break;
 	
 			default:
 				getUserList(request, response);
@@ -59,6 +63,7 @@ public class UserController extends HttpServlet {
 		String errorMessage = this.userService.createUser(newUser);
 		if (errorMessage != null) {
 			request.setAttribute("message", errorMessage);
+			request.setAttribute("theUser", newUser);
 			RequestDispatcher dispatcher = request.getRequestDispatcher("user_form.jsp");
 			dispatcher.forward(request, response);
 			return;
@@ -79,5 +84,11 @@ public class UserController extends HttpServlet {
 		dispatcher.forward(request, response);	
 	}
 	
+	private void showNewForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		HttpSession session = request.getSession();
+		session.setAttribute("theUser", null);
+		
+		response.sendRedirect("manage_user?command=LIST");
+	}
 
 }
