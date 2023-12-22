@@ -1,6 +1,8 @@
 package com.ray.dao;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.ray.entity.User;
 
@@ -41,7 +43,10 @@ public class UserDAO extends JpaDAO<User> {
 	}
 
 	public User getUserByEmail(String email) {
-		List<User> userList = super.getNamedQueryWithParam("User.HQL.findByEmail", email);
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("email", email);
+		
+		List<User> userList = super.getNamedQueryWithParam("User.HQL.findByEmail", params);
 		
 		if(userList != null && userList.size() >= 1) {
 			return userList.get(0);
