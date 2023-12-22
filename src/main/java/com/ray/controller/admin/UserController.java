@@ -28,16 +28,25 @@ public class UserController extends HttpServlet {
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// get data
-		List<User> userList = userDAO.finAll();
+		String command = request.getParameter("command");
 		
-		// pass data to JSP file
-		request.setAttribute("userList", userList);
-		RequestDispatcher dispatcher = request.getRequestDispatcher("user_list.jsp");
-		dispatcher.forward(request, response);	
+		if (command == null) {
+			command = "LIST";
+		}
+		
+		switch (command) {
+			case "LIST":
+				getUserList(request, response);
+				break;
+	
+			default:
+				getUserList(request, response);
+				break;
+		}
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// read parameter
 		request.setAttribute("message", null);
 		
 		String email = request.getParameter("email");
@@ -56,8 +65,19 @@ public class UserController extends HttpServlet {
 		}
 		
 		// redirect to user list
-		response.sendRedirect("manage_user");
+		response.sendRedirect("manage_user?command=LIST"); // set parameter
 		
 	}
+	
+	private void getUserList(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// get data
+		List<User> userList = userDAO.finAll();
+		
+		// pass data to JSP file
+		request.setAttribute("userList", userList);
+		RequestDispatcher dispatcher = request.getRequestDispatcher("user_list.jsp");
+		dispatcher.forward(request, response);	
+	}
+	
 
 }
