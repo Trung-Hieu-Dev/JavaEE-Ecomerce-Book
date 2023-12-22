@@ -3,6 +3,13 @@
 </head>
 <body>
 	<%@include file="navigation.jsp" %>
+	
+	<c:if test="${message != null}">
+		<div class="alert alert-warning alert-dismissible fade show float-end w-25" role="alert">
+		 	${message}
+		 	<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+		</div>
+	</c:if>
 
 	<div class="container py-5">
 		<h1 class="text-center mb-4">Create New User</h1>
@@ -33,7 +40,6 @@
 				</div>
 			</form>
 		</div>
-
 	</div>
 
 <%@include file="footer.jsp" %>
