@@ -10,7 +10,7 @@
 
 		<h2 class="text-center">Quick action</h2>
 		<div class="d-flex justify-content-center">
-			<a href="user_form.jsp" class="me-4">Create New User</a>
+			<a href="user_form.jsp?command=NEW" class="me-4">Create New User</a>
 		</div>
 		<hr class="mx-auto" style="width:50%;">
 		
@@ -28,13 +28,18 @@
 
 				<tbody>
 					<c:forEach items="${userList}" var="user" varStatus="count">
+						<!-- http://localhost:8080/Ecomerce_Book/admin/manage_user?command=LOAD&userId=?? -->
+						<c:url var="updateLink" value="manage_user">
+							<c:param name="command" value="LOAD"></c:param>
+							<c:param name="userId" value="${user.userId}"></c:param>
+						</c:url>
 						<tr>
 							<td>${count.index + 1}</td>
 							<td>${user.userId}</td>
 							<td>${user.email}</td>
 							<td>${user.fullName}</td>
 							<td>
-								<a href="#">Edit</a>
+								<a href="${updateLink}">Edit</a>
 								<span class="mx-3"> | </span>
 								<a href="#">Delete</a>
 							</td>

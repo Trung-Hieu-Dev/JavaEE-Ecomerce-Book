@@ -13,8 +13,8 @@ public class UserDAO extends JpaDAO<User> {
 	}
 
 	@Override
-	public User insert(User obj) {
-		return super.insert(obj);
+	public User insert(User user) {
+		return super.insert(user);
 	}
 
 	@Override
@@ -47,6 +47,19 @@ public class UserDAO extends JpaDAO<User> {
 		params.put("email", email);
 		
 		List<User> userList = super.getNamedQueryWithParam("User.HQL.findByEmail", params);
+		
+		if(userList != null && userList.size() >= 1) {
+			return userList.get(0);
+		}
+		
+		return null;
+	}
+	
+	public User getUserByUserId(Integer userId) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("userId", userId);
+		
+		List<User> userList = super.getNamedQueryWithParam("User.HQL.getUserById", params);
 		
 		if(userList != null && userList.size() >= 1) {
 			return userList.get(0);

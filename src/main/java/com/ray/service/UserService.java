@@ -17,9 +17,13 @@ public class UserService {
 			return "Email is existed. Please choose another one.";
 		}
 		
-		userDAO.insert(existedUser);
+		userDAO.insert(user);
 		
 		return null;
+	}
+	
+	public User getUserById(Integer userId) {
+		return this.userDAO.getUserByUserId(userId);
 	}
 	
 }

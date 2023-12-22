@@ -42,6 +42,9 @@ public class UserController extends HttpServlet {
 			case "NEW":
 				showNewForm(request, response);
 				break;
+			case "LOAD":
+				showFormEdit(request, response);
+				break;
 	
 			default:
 				getUserList(request, response);
@@ -50,31 +53,28 @@ public class UserController extends HttpServlet {
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// read parameter
-		request.setAttribute("message", null);
+		String command = request.getParameter("command");
 		
-		String email = request.getParameter("email");
-		String fullName = request.getParameter("fullName");
-		String password = request.getParameter("password");
-		
-		User newUser = new User(email, password, fullName);
-//		this.userDAO.insert(newUser);
-		
-		String errorMessage = this.userService.createUser(newUser);
-		if (errorMessage != null) {
-			request.setAttribute("message", errorMessage);
-			request.setAttribute("theUser", newUser);
-			RequestDispatcher dispatcher = request.getRequestDispatcher("user_form.jsp");
-			dispatcher.forward(request, response);
-			return;
+		if (command == null) {
+			command = "INSERT";
 		}
 		
-		// redirect to user list
-		response.sendRedirect("manage_user?command=LIST"); // set parameter
+		switch (command) {
+			case "INSERT":
+				insertUser(request, response);
+				break;
+	
+			default:
+				insertUser(request, response);
+				break;
+		}
 		
 	}
 	
 	private void getUserList(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		HttpSession session = request.getSession();
+		session.setAttribute("theUser", null);
+		
 		// get data
 		List<User> userList = userDAO.finAll();
 		
@@ -88,7 +88,41 @@ public class UserController extends HttpServlet {
 		HttpSession session = request.getSession();
 		session.setAttribute("theUser", null);
 		
-		response.sendRedirect("manage_user?command=LIST");
+		response.sendRedirect("user_form.jsp");
+	}
+	
+	private void showFormEdit(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		HttpSession session = request.getSession();
+		Integer userId = Integer.valueOf(request.getParameter("userId"));
+		
+		User userToUpdate = this.userService.getUserById(userId);
+		session.setAttribute("theUser", userToUpdate);
+		
+		response.sendRedirect("user_form.jsp");
+	}
+	
+	private void insertUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// read parameter
+		request.setAttribute("message", null);
+		
+		String email = request.getParameter("email");
+		String fullName = request.getParameter("fullName");
+		String password = request.getParameter("password");
+		
+		User newUser = new User(email, password, fullName);
+//				this.userDAO.insert(newUser);
+		
+		String errorMessage = this.userService.createUser(newUser);
+		if (errorMessage != null) {
+			request.setAttribute("message", errorMessage);
+			request.setAttribute("theUser", newUser);
+			RequestDispatcher dispatcher = request.getRequestDispatcher("user_form.jsp");
+			dispatcher.forward(request, response);
+			return;
+		}
+		
+		// redirect to user list
+		response.sendRedirect("manage_user?command=LIST"); // set parameter
 	}
 
 }

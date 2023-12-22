@@ -21,8 +21,12 @@
 		</div>
 		<hr class="mx-auto" style="width:50%;">
 		
+		<c:url var="actionLink" value="manage_user">
+			<c:param name="command" value="INSERT"/>
+		</c:url>
+		
 		<div class="d-flex flex-column align-items-center py-5">
-			<form action="manage_user" method="post" 
+			<form action="${actionLink}" method="post" 
 				style="width:350px;" 
 				onsubmit="return validateFormInput()"
 			>
