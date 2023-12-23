@@ -4,19 +4,23 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Objects;
 
+import org.hibernate.AssertionFailure;
 //import org.junit.BeforeClass;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.ray.dao.UserDAO;
 import com.ray.entity.User;
+import com.ray.service.UserService;
 
 class UserDAOTest {
 	private UserDAO userDAO;
+	private UserService userService;
 	
 	@BeforeEach
 	public void initUserDAO() {
 		this.userDAO = new UserDAO();
+		this.userService = new UserService();
 	}
 
 	@Test
@@ -35,7 +39,9 @@ class UserDAOTest {
 
 	@Test
 	void testUpdateUser() {
-		fail("Not yet implemented");
+		User user = new User(9, "ray@email.com", "12345", "John");
+		String errorMessage = this.userService.updateUser(user);
+		assertNotNull(errorMessage);
 	}
 
 	@Test
