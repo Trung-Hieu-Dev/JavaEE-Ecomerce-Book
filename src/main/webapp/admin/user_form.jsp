@@ -86,9 +86,9 @@
 	$(document).ready(function() {
 		$("#userForm").validate({
 			rules: {
-			    email: {required: true},
-			    fullName: {required: true},
-			    password: {required: true},
+			    email: {required: true, email:true},
+			    fullName: {required: true, minlength: 2},
+			    password: {required: true, minlength: 3},
 			},
 			errorPlacement: function(error, element) {}, // remove default label element
 			highlight: function (element, errorClass, validClass) { // in case in-valid
