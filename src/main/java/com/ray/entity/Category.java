@@ -1,5 +1,6 @@
 package com.ray.entity;
 
+import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -27,6 +28,10 @@ public class Category {
 	
 	public Category() {}
 
+	public Category(String name) {
+		this.name = name;
+	}
+	
 	public Category(Integer categoryId, String name) {
 		this.categoryId = categoryId;
 		this.name = name;
@@ -54,5 +59,24 @@ public class Category {
 				+ ", name=" + name 
 				+ "]";
 	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(categoryId, name);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Category other = (Category) obj;
+		return Objects.equals(categoryId, other.categoryId) && Objects.equals(name, other.name);
+	}
+	
+	
 	
 }
