@@ -35,9 +35,8 @@
 		
 		
 		<div class="d-flex flex-column align-items-center py-5">
-			<form action="${actionLink}" method="post" 
+			<form id="userForm" action="${actionLink}" method="post" 
 				style="width:350px;" 
-				onsubmit="return validateFormInput()"
 			>
 				<div class="form-floating mb-3">
 				  <input name="email" 
@@ -47,6 +46,7 @@
 				  		value="${theUser.email}"
 				  />
 				  <label for="inputUserEmail">Email address</label>
+				  <div class="invalid-feedback">Please input valid email</div>
 				</div>
 				<div class="form-floating mb-3">
 				  <input name="fullName" 
@@ -57,6 +57,7 @@
 				  		value="${theUser.fullName}" 
 				  />
 				  <label for="inputUserFullname">Full name</label>
+				  <div class="invalid-feedback">Please input valid full name</div>
 				</div>
 				<div class="form-floating mb-3">
 				  <input name="password" 
@@ -67,6 +68,7 @@
 				  		value="${theUser.password}" 
 				  />
 				  <label for="inputUserPassword">Password</label>
+				  <div class="invalid-feedback">Please input valid password</div>
 				</div>
 				<c:if test="${theUser != null}">
 					<input type="hidden" name="userId" value="${theUser.userId}" />
@@ -81,6 +83,25 @@
 <%@include file="footer.jsp" %>
 
 <script type="text/javascript">
+	$(document).ready(function() {
+		$("#userForm").validate({
+			rules: {
+			    email: {required: true},
+			    fullName: {required: true},
+			    password: {required: true},
+			},
+			errorPlacement: function(error, element) {}, // remove default label element
+			highlight: function (element, errorClass, validClass) { // in case in-valid
+				$(element).addClass("is-invalid").removeClass("is-valid"); //add and remove classes to input tag
+			},
+			unhighlight: function (element, errorClass, validClass) { // in case valid
+				$(element).addClass("is-valid").removeClass("is-invalid"); //add and remove classes to input tag
+			},
+		});
+	})
+</script>
+
+<!-- <script type="text/javascript">
 	function validateFormInput() {
 		var fieldEmail = document.getElementById("inputUserEmail");
  		var fieldFullname = document.getElementById("inputUserFullname");
@@ -112,7 +133,7 @@
  		
  		return true;
 	}
-</script>
+</script> -->
 
 
 
