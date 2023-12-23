@@ -37,5 +37,8 @@ public class UserService {
 		return null;
 	}
 	
+	public void deleteUser(Integer userId) {
+		this.userDAO.delete(userId);
+	}
 	
 }

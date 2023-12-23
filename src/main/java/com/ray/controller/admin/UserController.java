@@ -45,6 +45,9 @@ public class UserController extends HttpServlet {
 			case "LOAD":
 				showFormEdit(request, response);
 				break;
+			case "DELETE":
+				deleteUser(request, response);
+				break;
 	
 			default:
 				getUserList(request, response);
@@ -147,6 +150,14 @@ public class UserController extends HttpServlet {
 			return;
 		}
 		
+		
+		// redirect to user list
+		response.sendRedirect("manage_user?command=LIST"); // set parameter
+	}
+	
+	private void deleteUser(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		Integer userId = Integer.valueOf(request.getParameter("userId"));
+		this.userService.deleteUser(userId);
 		
 		// redirect to user list
 		response.sendRedirect("manage_user?command=LIST"); // set parameter
