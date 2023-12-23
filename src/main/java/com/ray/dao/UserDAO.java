@@ -68,6 +68,18 @@ public class UserDAO extends JpaDAO<User> {
 		return null;
 	}
 
-	
+	public User getUserByEmailAndNotId(String email, Integer userId ) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("email", email);
+		params.put("userId", userId);
+		
+		List<User> userList = super.getNamedQueryWithParam("User.HQL.getUserByEmailAndNotId", params);
+		
+		if(userList != null && userList.size() >= 1) {
+			return userList.get(0);
+		}
+		
+		return null;
+	}
 	
 }

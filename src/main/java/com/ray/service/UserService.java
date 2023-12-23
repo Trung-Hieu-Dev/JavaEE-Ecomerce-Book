@@ -27,6 +27,12 @@ public class UserService {
 	}
 	
 	public String updateUser(User user) {
+		User existedUser = userDAO.getUserByEmailAndNotId(user.getEmail(), user.getUserId());
+		
+		if (existedUser != null) {
+			return "Email is existed. Please choose another one.";
+		}
+		
 		userDAO.update(user);
 		return null;
 	}

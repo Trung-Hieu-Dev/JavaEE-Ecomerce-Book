@@ -13,7 +13,8 @@ import javax.persistence.Table;
 @Table(name = "users")
 @NamedQueries({
 	@NamedQuery(name = "User.HQL.findByEmail", query = "SELECT u FROM User u WHERE u.email = :email"),
-	@NamedQuery(name = "User.HQL.getUserById", query = "SELECT u FROM User u WHERE u.userId = :userId")
+	@NamedQuery(name = "User.HQL.getUserById", query = "SELECT u FROM User u WHERE u.userId = :userId"),
+	@NamedQuery(name = "User.HQL.getUserByEmailAndNotId", query = "SELECT u FROM User u WHERE u.email = :email and u.userId != :userId")
 })
 public class User {
 	

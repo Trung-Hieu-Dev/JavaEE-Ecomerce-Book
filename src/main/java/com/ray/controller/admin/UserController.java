@@ -128,7 +128,8 @@ public class UserController extends HttpServlet {
 		response.sendRedirect("manage_user?command=LIST"); // set parameter
 	}
 	
-	private void updateUser(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	private void updateUser(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+		request.setAttribute("message", null);
 		
 		Integer userId = Integer.valueOf(request.getParameter("userId"));
 		String email = request.getParameter("email");
@@ -137,7 +138,15 @@ public class UserController extends HttpServlet {
 		
 		User updatedUser = new User(userId, email, password, fullName);
 		
-		this.userService.updateUser(updatedUser);
+		String errorMessage = this.userService.updateUser(updatedUser);
+		if (errorMessage != null) {
+			request.setAttribute("message", errorMessage);
+			request.setAttribute("theUser", updatedUser);
+			RequestDispatcher dispatcher = request.getRequestDispatcher("user_form.jsp");
+			dispatcher.forward(request, response);
+			return;
+		}
+		
 		
 		// redirect to user list
 		response.sendRedirect("manage_user?command=LIST"); // set parameter
