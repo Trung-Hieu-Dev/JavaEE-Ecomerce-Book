@@ -3,13 +3,10 @@
 </head>
 <body>
 	<%@include file="navigation.jsp" %>
-	
 	<c:if test="${message != null}">
-		<div class="alert alert-warning alert-dismissible fade show float-end w-25" role="alert">
-		 	${message}
-		 	<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-		</div>
+		<input type="hidden" id="notification" value="${message}" />
 	</c:if>
+	
 
 	<div class="container py-5">
 		<c:if test="${theUser == null}">
@@ -82,6 +79,17 @@
 
 <%@include file="footer.jsp" %>
 
+<!-- AlertifyJS -->
+<script type="text/javascript">
+	var notification = document.getElementById("notification");
+	
+	if(notification != null && notification.value.length > 0) {
+		alertify.error(notification.value);
+	}
+</script>
+
+
+<!-- JQuery Validation -->
 <script type="text/javascript">
 	$(document).ready(function() {
 		$("#userForm").validate({
