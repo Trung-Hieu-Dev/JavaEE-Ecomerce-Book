@@ -10,47 +10,52 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "users")
+@Table(name="users")
 @NamedQueries({
-	@NamedQuery(name = "User.HQL.findByEmail", query = "SELECT u FROM User u WHERE u.email = :email"),
-	@NamedQuery(name = "User.HQL.getUserById", query = "SELECT u FROM User u WHERE u.userId = :userId"),
-	@NamedQuery(name = "User.HQL.getUserByEmailAndNotId", query = "SELECT u FROM User u WHERE u.email = :email and u.userId != :userId")
+	@NamedQuery(name="User.HQL.findByEmail", query = "SELECT u FROM User u where u.email = :email"),
+	@NamedQuery(name="User.HQL.getUserById", query = "SELECT u FROM User u where u.userId = :userId"),
+	@NamedQuery(name="User.HQL.findByEmailAndNotUserId", query = "SELECT u FROM User u where u.email = :email and u.userId != :userId")
 })
 public class User {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "user_id")
+	@Column(name="user_id")
 	private Integer userId;
 	
-	@Column(name = "email")
+	@Column(name="email")
 	private String email;
 	
-	@Column(name = "password")
-	private String password;
-	
-	@Column(name = "full_name")
+	@Column(name="full_name")
 	private String fullName;
 	
-	public User() {}
-
-	public User(String email, String password, String fullName) {
-		this.email = email;
-		this.password = password;
-		this.fullName = fullName;
+	@Column(name="password")
+	private String password;
+	
+	/// var user = new User();
+	public User() {
 	}
 	
-	public User(Integer userId, String email, String password, String fullName) {
+	/// var user = new User(user@email.com, Bob, password)
+	public User(String email, String fullName, String password) {
+		this.email = email;
+		this.fullName = fullName;
+		this.password = password;
+	}
+
+	
+	public User(Integer userId, String email, String fullName, String password) {
+		super();
 		this.userId = userId;
 		this.email = email;
-		this.password = password;
 		this.fullName = fullName;
+		this.password = password;
 	}
-
+	
 	public Integer getUserId() {
-		return userId;
+		return this.userId;
 	}
-
+	
 	public void setUserId(Integer userId) {
 		this.userId = userId;
 	}
@@ -63,14 +68,6 @@ public class User {
 		this.email = email;
 	}
 
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
 	public String getFullName() {
 		return fullName;
 	}
@@ -79,14 +76,18 @@ public class User {
 		this.fullName = fullName;
 	}
 
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
 	@Override
 	public String toString() {
-		return "User [userId=" + userId 
-				+ ", email=" + email 
-				+ ", password=" + password 
-				+ ", fullName=" + fullName
+		return "User [userId=" + userId + ", email=" + email + ", fullName=" + fullName + ", password=" + password
 				+ "]";
 	}
-	
 	
 }

@@ -1,71 +1,63 @@
 package test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.*;
 
 import java.util.Objects;
 
-import org.hibernate.AssertionFailure;
-//import org.junit.BeforeClass;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import com.ray.dao.UserDAO;
 import com.ray.entity.User;
-import com.ray.service.UserService;
 
 class UserDAOTest {
-	private UserDAO userDAO;
-	private UserService userService;
+	private static UserDAO userDAO;
 	
-	@BeforeEach
-	public void initUserDAO() {
-		this.userDAO = new UserDAO();
-		this.userService = new UserService();
+	@BeforeAll
+	public static void setup() {
+		userDAO = new UserDAO();
 	}
 
 	@Test
-	void testGetTotalRecord() {
+	public void testGetTotalRecord() {
 		fail("Not yet implemented");
 	}
 
 	@Test
-	void testInsertUser() {
-		User user = new User("test@mail.com", "12345", "John");
-		User insertedUser = userDAO.insert(user);
+	public void testCreateUser() {
+		User newUser = new User("test223@email.com", "test223", "password");
+		User insertedUser = userDAO.create(newUser);
 		
-		// if success must have id quantity
 		assertTrue(insertedUser.getUserId() > 0);
 	}
 
 	@Test
-	void testUpdateUser() {
-		User user = new User(9, "ray@email.com", "12345", "John");
-		String errorMessage = this.userService.updateUser(user);
-		assertNotNull(errorMessage);
-	}
-
-	@Test
-	void testFindOneObject() {
+	public void testUpdateUser() {
 		fail("Not yet implemented");
 	}
 
 	@Test
-	void testFinAll() {
+	public void testGetByIdObject() {
 		fail("Not yet implemented");
 	}
 
 	@Test
-	void testDeleteUser() {
-		userDAO.delete(13);
+	public void testGetListAll() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+	public void testDeleteByIdUser() {
+		userDAO.deleteById(10);
 		
-		assertTrue(Objects.isNull(userDAO.findOne(13)));
+		assertTrue(Objects.isNull(userDAO.getById(10)));
 	}
 	
 	@Test
-	void testGetUserByEmail() {
+	public void testGetUserByEmail() {
 		User user = userDAO.getUserByEmail("ray@email.com");
+		System.out.println(user);
 		assertNotNull(user);
 	}
-	
 
 }

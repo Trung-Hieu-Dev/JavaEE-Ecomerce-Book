@@ -3,9 +3,8 @@ package test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
-import java.util.Objects;
 
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import com.ray.dao.CategoryDAO;
@@ -14,11 +13,15 @@ import com.ray.entity.Category;
 
 class CategoryDAOTest {
 
-	private CategoryDAO categoryDAO;
-	
-	@BeforeEach
-	public void initCategoryDAO() {
-		this.categoryDAO = new CategoryDAO();
+	private static CategoryDAO categoryDAO;
+	@BeforeAll
+	public static void setup() {
+		categoryDAO = new CategoryDAO();
+	}
+
+	@Test
+	void testDeleteById() {
+		fail("Not yet implemented");
 	}
 
 	@Test
@@ -27,52 +30,34 @@ class CategoryDAOTest {
 	}
 
 	@Test
-	void testInsertCategory() {
-		Category category = new Category("Test Create");
-		Category insertedCategory = categoryDAO.insert(category);
-		
-		// if success must have id quantity
+	void testCreateCategory() {
+		Category newCategory = new Category("Comic");
+		Category insertedCategory = categoryDAO.create(newCategory);
 		assertTrue(insertedCategory.getCategoryId() > 0);
 	}
 
 	@Test
 	void testUpdateCategory() {
-		Category category = new Category("Test Update");
-		Category insertedCategory = categoryDAO.insert(category);
-		Integer insertedCategoryId = insertedCategory.getCategoryId();
-		Category existedCategory = categoryDAO.findOne(insertedCategoryId);
-		existedCategory.setName("New Updated");
-		Category updatedCategory = categoryDAO.update(existedCategory);
-				
-		Category expectedCategory = new Category(insertedCategoryId, "New Updated");
+		Category updateCategory = new Category(1, "Romantic");
 		
-		assertEquals(expectedCategory, updatedCategory);
+		Category expectCategory = categoryDAO.getById(updateCategory.getCategoryId());
+		
+		expectCategory.setName("Romantic");
+		
+		Category updatedCategory = categoryDAO.update(updateCategory);
+		assertEquals(expectCategory, updatedCategory);
+	}
+	
+
+	@Test
+	void testGetByIdObject() {
+		fail("Not yet implemented");
 	}
 
 	@Test
-	void testFindOneObject() {
-		Category category = new Category("Test Find One");
-		Category insertedCategory = categoryDAO.insert(category);
-		Integer insertedCategoryId = insertedCategory.getCategoryId();
-		Category existedCategory = categoryDAO.findOne(insertedCategoryId);
-		
-		assertNotNull(existedCategory);
+	void testGetListAll() {
+		List<Category> categoryList = categoryDAO.getListAll();
+		System.out.println(categoryList);
+		assertTrue(categoryList.size() > 0);
 	}
-
-	@Test
-	void testFinAll() {
-		List<Category> categories = categoryDAO.finAll();
-		assertTrue(categories.size() > 0);
-	}
-
-	@Test
-	void testDeleteCategory() {
-		Category category = new Category("Test");
-		Category insertedCategory = categoryDAO.insert(category);
-		Integer insertedCategoryId = insertedCategory.getCategoryId();
-		
-		categoryDAO.delete(insertedCategoryId);
-		assertTrue(Objects.isNull(categoryDAO.findOne(insertedCategoryId)));
-	}
-
 }

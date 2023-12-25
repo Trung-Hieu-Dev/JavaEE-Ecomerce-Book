@@ -7,34 +7,33 @@ import java.util.Map;
 import com.ray.entity.User;
 
 public class UserDAO extends JpaDAO<User> {
-	
 	public UserDAO() {
 		super(User.class);
 	}
 
 	@Override
-	public User insert(User user) {
-		return super.insert(user);
+	public User create(User object) {
+		return super.create(object);
 	}
 
 	@Override
-	public User update(User obj) {
-		return super.update(obj);
+	public User update(User object) {
+		return super.update(object);
 	}
 
 	@Override
-	public User findOne(Object objId) {
-		return super.findOne(objId);
+	public User getById(Object objectId) {
+		return super.getById(objectId);
 	}
 
 	@Override
-	public List<User> finAll() {
-		return super.finAll();
+	public List<User> getListAll() {
+		return super.getListAll();
 	}
 
 	@Override
-	public void delete(Object objId) {
-		super.delete(objId);
+	public void deleteById(Object objectId) {
+		super.deleteById(objectId);
 	}
 
 	@Override
@@ -42,44 +41,46 @@ public class UserDAO extends JpaDAO<User> {
 		return super.getTotalRecord();
 	}
 
+
 	public User getUserByEmail(String email) {
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("email", email);
 		
-		List<User> userList = super.getNamedQueryWithParam("User.HQL.findByEmail", params);
+		List<User> userList =super.getNamedEqueryWithParams("User.HQL.findByEmail", params);
 		
-		if(userList != null && userList.size() >= 1) {
+		if (userList != null && userList.size() > 0) {
 			return userList.get(0);
 		}
 		
 		return null;
 	}
+	
 	
 	public User getUserByUserId(Integer userId) {
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("userId", userId);
 		
-		List<User> userList = super.getNamedQueryWithParam("User.HQL.getUserById", params);
+		List<User> userList =super.getNamedEqueryWithParams("User.HQL.getUserById", params);
 		
-		if(userList != null && userList.size() >= 1) {
-			return userList.get(0);
-		}
-		
-		return null;
-	}
-
-	public User getUserByEmailAndNotId(String email, Integer userId ) {
-		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("email", email);
-		params.put("userId", userId);
-		
-		List<User> userList = super.getNamedQueryWithParam("User.HQL.getUserByEmailAndNotId", params);
-		
-		if(userList != null && userList.size() >= 1) {
+		if (userList != null && userList.size() > 0) {
 			return userList.get(0);
 		}
 		
 		return null;
 	}
 	
+	
+	public User getUserByEmailAndNotUserId(User user) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("email", user.getEmail());
+		params.put("userId", user.getUserId());
+		
+		List<User> userList =super.getNamedEqueryWithParams("User.HQL.findByEmailAndNotUserId", params);
+		
+		if (userList != null && userList.size() > 0) {
+			return userList.get(0);
+		}
+		
+		return null;
+	}
 }

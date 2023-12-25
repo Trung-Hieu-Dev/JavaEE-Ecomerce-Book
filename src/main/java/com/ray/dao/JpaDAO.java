@@ -17,213 +17,184 @@ import com.ray.config.HibernateSessionFactoryConfig;
 
 public abstract class JpaDAO<T> {
 	private SessionFactory sessionFactory;
-	private Class<T> _genericClass; // _genericClass = User.Class || Product.Class
+	private Class<T> _genericClass; /// _genericClass = User.Class || Product.Class
 
+	// constructor
 	public JpaDAO(Class<T> genericClass) {
 		this.sessionFactory = HibernateSessionFactoryConfig.getSessionFactory();
 		this._genericClass = genericClass;
 	}
 	
-	// save to DB
-	public T insert(T obj) {
+	public T create(T object) {
 		Transaction transaction = null;
 		
 		try (Session session = sessionFactory.openSession()) {
 			// start a transaction
 			transaction = session.beginTransaction();
 			
-			// write data to DB
-			session.save(obj);
+			session.save(object);
 			
-			// force to write obj to DB
+			// force to write data on database
 			session.flush();
 			
-			// get saved obj data after writing to DB
-			session.refresh(obj);
+			session.refresh(object);
 			
-			// end transaction
 			transaction.commit();
-			
-		} catch (Exception e) {
+		} catch (Exception ex) {
 			if (transaction != null) {
-				transaction.rollback(); // do not save to db if not success
+				transaction.rollback();
 			}
-			e.printStackTrace();
+			ex.printStackTrace();
 		}
-		return obj;
+		
+		return object;
 	}
 	
-	// update
-	public T update(T obj) {
+	public T update(T object) {
 		Transaction transaction = null;
 		
 		try (Session session = sessionFactory.openSession()) {
-			// start a transaction
 			transaction = session.beginTransaction();
 			
-			// update data
-			session.update(obj);
+			session.update(object);
 			
-			// end transaction
 			transaction.commit();
 			
-		} catch (Exception e) {
+		} catch (Exception ex) {
 			if (transaction != null) {
-				transaction.rollback(); // do not save to db if not success
+				transaction.rollback();
 			}
-			e.printStackTrace();
+			ex.printStackTrace();
 		}
-		return obj;
+		return object;
 	}
 	
-	// find one
-	public T findOne(Object objId) {
+	public T getById(Object objectId) {
 		Transaction transaction = null;
-		Object queryObj = null;
+		Object queryObject = null;
 		T result = null;
 		
 		try (Session session = sessionFactory.openSession()) {
-			// start a transaction
 			transaction = session.beginTransaction();
 			
-			// Class<T> queryObj
-			queryObj = session.get(_genericClass, (Serializable) objId);
+			queryObject = session.get(_genericClass, (Serializable) objectId);
 			
-			// Class<T> result --> T
-			result = _genericClass.cast(queryObj);
-			
-			// end transaction
+			/// Class<T> --> User.class 
+			result = _genericClass.cast(queryObject);
+					
 			transaction.commit();
 			
-		} catch (Exception e) {
+		} catch (Exception ex) {
 			if (transaction != null) {
-				transaction.rollback(); // do not save to db if not success
+				transaction.rollback();
 			}
-			e.printStackTrace();
+			ex.printStackTrace();
 		}
 		return result;
 	}
 	
-	// find all
-	public List<T> finAll() {
+	public List<T> getListAll() {
 		Transaction transaction = null;
 		List<T> objectList = null;
-		
 		try (Session session = sessionFactory.openSession()) {
-			// start a transaction
 			transaction = session.beginTransaction();
 			
-			// get list
 			CriteriaBuilder builder = session.getCriteriaBuilder();
 			CriteriaQuery<T> criteria = builder.createQuery(_genericClass); ///_genericClass = User.class
 			Root<T> root = criteria.from(_genericClass); ///  FROM User
 			criteria.select(root); /// select * 
+///			criteria.select(root).where(builder.like(root.get("fullName"), "%tommy%"));
 			
 			Query<T> query = session.createQuery(criteria);
 			objectList = query.getResultList();
 			
-			// end transaction
 			transaction.commit();
-			
-		} catch (Exception e) {
+		} catch (Exception ex) {
 			if (transaction != null) {
-				transaction.rollback(); // do not save to db if not success
+				transaction.rollback();
 			}
-			e.printStackTrace();
+			ex.printStackTrace();
 		}
 		return objectList;
 	}
 	
-	// delete
-	public void delete(Object objId) {
+	public void deleteById(Object objectId) {
 		Transaction transaction = null;
-		Object queryObj = null;
+		Object queryObject = null;
 		
 		try (Session session = sessionFactory.openSession()) {
-			// start a transaction
 			transaction = session.beginTransaction();
 			
-			// get obj to delete
-			queryObj = session.get(_genericClass, (Serializable) objId);
+			// get object to delete
+			queryObject = session.get(_genericClass, (Serializable) objectId);
 			
-			// delete
-			if (queryObj != null) {
-				session.delete(queryObj);
-				System.out.println("Delete succcessfully!");
+			if (queryObject != null) {
+				session.delete(queryObject);
+				System.out.println("Delete successful");
 			}
 			
-			// end transaction
 			transaction.commit();
 			
-		} catch (Exception e) {
+		} catch (Exception ex) {
 			if (transaction != null) {
-				transaction.rollback(); // do not save to db if not success
+				transaction.rollback();
 			}
-			e.printStackTrace();
+			ex.printStackTrace();
 		}
 	}
+	
 	
 	public long getTotalRecord() {
 		Transaction transaction = null;
 		long totalRecord = 0;
-		
 		try (Session session = sessionFactory.openSession()) {
-			// start a transaction
 			transaction = session.beginTransaction();
 			
-			// get total record
 			CriteriaBuilder builder = session.getCriteriaBuilder();
 			CriteriaQuery<Long> criteria = builder.createQuery(Long.class);
 			Root<T> root = criteria.from(_genericClass); ///  FROM User
-			criteria.select(builder.count(root)); /// select count(*)
+			criteria.select(builder.count(root)); /// select * 
 			
 			Query<Long> query = session.createQuery(criteria);
 			totalRecord = query.getSingleResult();
 			
-			// end transaction
 			transaction.commit();
 			
-		} catch (Exception e) {
+		} catch (Exception ex) {
 			if (transaction != null) {
-				transaction.rollback(); // do not save to db if not success
+				transaction.rollback();
 			}
-			e.printStackTrace();
+			ex.printStackTrace();
 		}
+		
 		return totalRecord;
 	}
 	
-	public List<T> getNamedQueryWithParam(String hql, Map<String, Object> params) {
+	public List<T> getNamedEqueryWithParams(String hql, Map<String, Object> params) {
 		Transaction transaction = null;
 		List<T> objectList = null;
 		
 		try (Session session = sessionFactory.openSession()) {
-			// start a transaction
 			transaction = session.beginTransaction();
 			
 			@SuppressWarnings("unchecked")
 			Query<T> hqlQuery = session.createNamedQuery(hql);
 			
-			for(Map.Entry<String, Object> entry : params.entrySet()) {
+			for (Map.Entry<String, Object> entry : params.entrySet()) {
 				hqlQuery.setParameter(entry.getKey(), entry.getValue());
 			}
 			
 			objectList = hqlQuery.getResultList();
 			
-			// end transaction
 			transaction.commit();
 			
-		} catch (Exception e) {
+		} catch (Exception ex) {
 			if (transaction != null) {
-				transaction.rollback(); // do not save to db if not success
+				transaction.rollback();
 			}
-			e.printStackTrace();
+			ex.printStackTrace();
 		}
 		
 		return objectList;
 	}
-	
-	
-	
-	
-	
 }

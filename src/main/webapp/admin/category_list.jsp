@@ -5,12 +5,12 @@
 	<%@include file="navigation.jsp" %>
 
 	<div class="container py-5">
-		<h1 class="text-center mb-4">User Management</h1>
+		<h1 class="text-center mb-4">Category Management</h1>
 		<hr class="mx-auto" style="width:50%;">
 		
 		<h2 class="text-center">Quick action</h2>
 		<div class="d-flex justify-content-center">
-			<a href="manage_user?command=NEW" class="me-4">New User</a>
+			<a href="manage_category?command=NEW" class="me-4">New Category</a>
 		</div>
 		<hr class="mx-auto" style="width:50%;">
 		
@@ -20,29 +20,27 @@
 					<tr>
 						<th>Index</th>
 						<th>ID</th>
-						<th>Email</th>
-						<th>Full name</th>
+						<th>Category Name</th>
 						<th>Actions</th>
 					</tr>
 				</thead>
 				
 				<tbody>
-					<c:forEach items="${userList}" var="user" varStatus="count">
-						<!-- http://localhost:8080/ebook/admin/manage_user?command=LOAD&userId=userId -->
-						<c:url var="updateLink" value="manage_user">
+					<c:forEach items="${categoryList}" var="category" varStatus="count">
+						<!-- http://localhost:8080/ebook/admin/manage_category?command=LOAD&userId=categoryId -->
+						<c:url var="updateLink" value="manage_category">
 							<c:param name="command" value="LOAD"/>
-							<c:param name="userId" value="${user.userId}"/>
+							<c:param name="categoryId" value="${category.categoryId}"/>
 						</c:url>
 						
 						<tr>
 							<td>${count.index + 1}</td>
-							<td>${user.userId }</td>
-							<td>${user.email }</td>
-							<td>${user.fullName }</td>
+							<td>${category.categoryId }</td>
+							<td>${category.name }</td>
 							<td>
 								<a href="${updateLink}">Edit</a>
 								<span class="mx-3"> | </span>
-								<a href="manage_user?command=DELETE&userId=${user.userId}">Delete</a>
+								<a href="manage_category?command=DELETE&categoryId=${category.categoryId}">Delete</a>
 							</td>
 						</tr>
 					</c:forEach>

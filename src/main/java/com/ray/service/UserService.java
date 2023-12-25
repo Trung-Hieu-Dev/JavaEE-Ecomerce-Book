@@ -4,41 +4,44 @@ import com.ray.dao.UserDAO;
 import com.ray.entity.User;
 
 public class UserService {
+	
 	private UserDAO userDAO;
 
 	public UserService() {
 		this.userDAO = new UserDAO();
 	}
 	
+	
 	public String createUser(User user) {
-		User existedUser = userDAO.getUserByEmail(user.getEmail());
+		User existUserWithEmail = userDAO.getUserByEmail(user.getEmail());
 		
-		if (existedUser != null) {
-			return "Email is existed. Please choose another one.";
+		if (existUserWithEmail != null) {
+			return "The email is already used by the other account";
 		}
 		
-		userDAO.insert(user);
-		
+		userDAO.create(user);
 		return null;
 	}
+	
 	
 	public User getUserById(Integer userId) {
 		return this.userDAO.getUserByUserId(userId);
 	}
 	
-	public String updateUser(User user) {
-		User existedUser = userDAO.getUserByEmailAndNotId(user.getEmail(), user.getUserId());
+	
+	public String update(User user) {
+		User existUserWithEmail = userDAO.getUserByEmailAndNotUserId(user);
 		
-		if (existedUser != null) {
-			return "Email is existed. Please choose another one.";
+		if (existUserWithEmail != null) {
+			return "The email is already used by the other account";
 		}
 		
 		userDAO.update(user);
 		return null;
 	}
 	
-	public void deleteUser(Integer userId) {
-		this.userDAO.delete(userId);
-	}
 	
+	public void deleteUser(Integer userId) {
+		this.userDAO.deleteById(userId);
+	}
 }

@@ -7,42 +7,45 @@ import com.ray.entity.Category;
 
 public class CategoryService {
 	private CategoryDAO categoryDAO;
-
+	
 	public CategoryService() {
-		this.categoryDAO = new CategoryDAO();
+		categoryDAO = new CategoryDAO();
 	}
 	
+	
 	public List<Category> listCategory() {
-		return categoryDAO.finAll();
+		return categoryDAO.getListAll();
 	}
 	
 	public Category getById(Integer categoryId) {
-		return categoryDAO.findOne(categoryId);
+		return categoryDAO.getById(categoryId);
 	}
 	
 	public void delete(Integer categoryId) {
-		categoryDAO.delete(categoryId);
+		categoryDAO.deleteById(categoryId);
 	}
 	
+	
 	public String create(Category category) {
-		Category existedCategory = categoryDAO.getByName(category.getName());
+		Category existCategory = categoryDAO.getByName(category.getName());
 		
-		if (existedCategory != null) {
-			return "Category name is existed. Please choose another name.";
+		if (existCategory != null) {
+			return "The category name already exists";
 		}
-		categoryDAO.insert(category);
 		
+		categoryDAO.create(category);
 		return null;
 	}
 	
+	
 	public String update(Category category) {
-		Category existedCategory = categoryDAO.getUserByNameAndNotId(category);
+		Category existCategory = categoryDAO.getByNameAndNotCategoryId(category);
 		
-		if (existedCategory != null) {
-			return "Category was existed. Please choose another name.";
+		if (existCategory != null) {
+			return "The category name already exists";
 		}
-		categoryDAO.update(category);
 		
+		categoryDAO.update(category);
 		return null;
 	}
 }

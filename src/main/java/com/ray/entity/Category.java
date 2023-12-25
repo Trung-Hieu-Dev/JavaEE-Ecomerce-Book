@@ -1,6 +1,5 @@
 package com.ray.entity;
 
-import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -14,32 +13,35 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "category")
+@Table(name="category")
 @NamedQueries({
-	@NamedQuery(name = "Category.HQL.getByName", 
-			query = "SELECT u FROM User c WHERE c.name = :name"),
-	@NamedQuery(name = "Category.HQL.getByNameAndNotId", 
-			query = "SELECT c FROM Category c WHERE c.name = :name and c.categoryId != :categoryId")
+	@NamedQuery(name="Category.HQL.getByName", 
+		query = "SELECT c FROM Category c where c.name = :name"),
+	@NamedQuery(name="Category.HQL.getByNameAndNotCategoryId", 
+		query = "SELECT c FROM Category c where c.name = :name and c.categoryId != :categoryId")
 })
 public class Category {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "category_id")
+	@Column(name="category_id")
 	private Integer categoryId;
 	
-	@Column(name = "name")
+	@Column(name="name")
 	private String name;
-	
-	@OneToMany(mappedBy = "category")
+
+	@OneToMany(mappedBy="category")
 	private Set<Product> products;
 	
-	public Category() {}
+	public Category() {
+	}
 
+	
 	public Category(String name) {
 		this.name = name;
 	}
-	
+
+
 	public Category(Integer categoryId, String name) {
 		this.categoryId = categoryId;
 		this.name = name;
@@ -62,16 +64,14 @@ public class Category {
 	}
 
 	@Override
-	public String toString() {
-		return "Category [categoryId=" + categoryId 
-				+ ", name=" + name 
-				+ "]";
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((categoryId == null) ? 0 : categoryId.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		return result;
 	}
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(categoryId, name);
-	}
 
 	@Override
 	public boolean equals(Object obj) {
@@ -82,9 +82,23 @@ public class Category {
 		if (getClass() != obj.getClass())
 			return false;
 		Category other = (Category) obj;
-		return Objects.equals(categoryId, other.categoryId) && Objects.equals(name, other.name);
+		if (categoryId == null) {
+			if (other.categoryId != null)
+				return false;
+		} else if (!categoryId.equals(other.categoryId))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		return true;
 	}
-	
-	
+
+
+	@Override
+	public String toString() {
+		return "Category [categoryId=" + categoryId + ", name=" + name + "]";
+	}
 	
 }

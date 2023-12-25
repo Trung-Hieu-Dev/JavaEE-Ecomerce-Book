@@ -7,34 +7,33 @@ import java.util.Map;
 import com.ray.entity.Category;
 
 public class CategoryDAO extends JpaDAO<Category> {
-	
 	public CategoryDAO() {
 		super(Category.class);
 	}
 
 	@Override
-	public Category insert(Category Category) {
-		return super.insert(Category);
+	public Category create(Category object) {
+		return super.create(object);
 	}
 
 	@Override
-	public Category update(Category obj) {
-		return super.update(obj);
+	public Category update(Category object) {
+		return super.update(object);
 	}
 
 	@Override
-	public Category findOne(Object objId) {
-		return super.findOne(objId);
+	public Category getById(Object objectId) {
+		return super.getById(objectId);
 	}
 
 	@Override
-	public List<Category> finAll() {
-		return super.finAll();
+	public List<Category> getListAll() {
+		return super.getListAll();
 	}
 
 	@Override
-	public void delete(Object objId) {
-		super.delete(objId);
+	public void deleteById(Object objectId) {
+		super.deleteById(objectId);
 	}
 
 	@Override
@@ -42,31 +41,34 @@ public class CategoryDAO extends JpaDAO<Category> {
 		return super.getTotalRecord();
 	}
 
+
 	public Category getByName(String name) {
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("name", name);
 		
-		List<Category> categoryList = super.getNamedQueryWithParam("Category.HQL.getByName", params);
+		List<Category> categoryList = super.getNamedEqueryWithParams("Category.HQL.getByName", params);
 		
-		if(categoryList != null && categoryList.size() >= 1) {
+		/// get first record
+		if (categoryList != null && categoryList.size() > 0) {
 			return categoryList.get(0);
 		}
 		
 		return null;
 	}
 	
-	public Category getUserByNameAndNotId(Category category) {
+	
+	public Category getByNameAndNotCategoryId(Category category) {
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("name", category.getName());
 		params.put("categoryId", category.getCategoryId());
 		
-		List<Category> categoryList = super.getNamedQueryWithParam("Category.HQL.getByNameAndNotId", params);
+		List<Category> categoryList = super.getNamedEqueryWithParams("Category.HQL.getByNameAndNotCategoryId", params);
 		
-		if(categoryList != null && categoryList.size() >= 1) {
+		/// get first record
+		if (categoryList != null && categoryList.size() > 0) {
 			return categoryList.get(0);
 		}
 		
 		return null;
 	}
-	
 }

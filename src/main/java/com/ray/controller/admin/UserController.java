@@ -20,22 +20,23 @@ import com.ray.service.UserService;
 public class UserController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private UserDAO userDAO;
-	private UserService userService; 
-       
+	private UserService userService;
+	
     public UserController() {
         super();
         this.userDAO = new UserDAO();
         this.userService = new UserService();
     }
 
+
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String command = request.getParameter("command");
+		String theCommand = request.getParameter("command");
 		
-		if (command == null) {
-			command = "LIST";
+		if (theCommand == null) {
+			theCommand = "LIST";
 		}
 		
-		switch (command) {
+		switch (theCommand) {
 			case "LIST":
 				getUserList(request, response);
 				break;
@@ -43,124 +44,117 @@ public class UserController extends HttpServlet {
 				showNewForm(request, response);
 				break;
 			case "LOAD":
-				showFormEdit(request, response);
+				showEditForm(request, response);
 				break;
 			case "DELETE":
 				deleteUser(request, response);
 				break;
-	
 			default:
 				getUserList(request, response);
-				break;
 		}
+
 	}
 
+
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String command = request.getParameter("command");
+		String theCommand = request.getParameter("command");
 		
-		if (command == null) {
-			command = "INSERT";
+		if (theCommand == null) {
+			theCommand = "LIST";
 		}
 		
-		switch (command) {
+		switch (theCommand) {
 			case "INSERT":
 				insertUser(request, response);
 				break;
 			case "UPDATE":
 				updateUser(request, response);
 				break;
-	
 			default:
-				insertUser(request, response);
-				break;
+				getUserList(request, response);
 		}
 		
 	}
 	
-	private void getUserList(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		HttpSession session = request.getSession();
-		session.setAttribute("theUser", null);
-		
-		// get data
-		List<User> userList = userDAO.finAll();
-		
-		// pass data to JSP file
-		request.setAttribute("userList", userList);
-		RequestDispatcher dispatcher = request.getRequestDispatcher("user_list.jsp");
-		dispatcher.forward(request, response);	
-	}
 	
-	private void showNewForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	private void getUserList(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// get data
+		List<User> userList = this.userDAO.getListAll();
+		
+		/// pass data to JSP
+		request.setAttribute("userList", userList);
+		
+		RequestDispatcher dispatcher = request.getRequestDispatcher("user_list.jsp");
+		dispatcher.forward(request, response);
+	}
+
+	
+	private void showNewForm(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		HttpSession session = request.getSession();
 		session.setAttribute("theUser", null);
 		
 		response.sendRedirect("user_form.jsp");
 	}
 	
-	private void showFormEdit(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	
+	private void showEditForm(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		HttpSession session = request.getSession();
-		Integer userId = Integer.valueOf(request.getParameter("userId"));
+		Integer theUserId  = Integer.valueOf(request.getParameter("userId"));
 		
-		User userToUpdate = this.userService.getUserById(userId);
+		User userToUpdate = this.userService.getUserById(theUserId);
 		session.setAttribute("theUser", userToUpdate);
 		
 		response.sendRedirect("user_form.jsp");
 	}
 	
-	private void insertUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// read parameter
+	
+	private void insertUser(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		request.setAttribute("message", null);
 		
 		String email = request.getParameter("email");
 		String fullName = request.getParameter("fullName");
 		String password = request.getParameter("password");
 		
-		User newUser = new User(email, password, fullName);
-//				this.userDAO.insert(newUser);
+		User newUser = new User(email, fullName, password);
+//		this.userDAO.create(newUser);
+		String errorMessage = userService.createUser(newUser);
 		
-		String errorMessage = this.userService.createUser(newUser);
 		if (errorMessage != null) {
 			request.setAttribute("message", errorMessage);
 			request.setAttribute("theUser", newUser);
-			RequestDispatcher dispatcher = request.getRequestDispatcher("user_form.jsp");
-			dispatcher.forward(request, response);
+			RequestDispatcher rd = request.getRequestDispatcher("user_form.jsp");
+			rd.forward(request, response);
 			return;
 		}
 		
-		// redirect to user list
-		response.sendRedirect("manage_user?command=LIST"); // set parameter
+		response.sendRedirect("manage_user?command=LIST");
 	}
 	
+	
 	private void updateUser(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-		request.setAttribute("message", null);
-		
 		Integer userId = Integer.valueOf(request.getParameter("userId"));
 		String email = request.getParameter("email");
 		String fullName = request.getParameter("fullName");
 		String password = request.getParameter("password");
 		
-		User updatedUser = new User(userId, email, password, fullName);
+		User userToUpdate = new User(userId, email, fullName, password);
+		String errorMessage = this.userService.update(userToUpdate);
 		
-		String errorMessage = this.userService.updateUser(updatedUser);
 		if (errorMessage != null) {
 			request.setAttribute("message", errorMessage);
-			request.setAttribute("theUser", updatedUser);
-			RequestDispatcher dispatcher = request.getRequestDispatcher("user_form.jsp");
-			dispatcher.forward(request, response);
+			RequestDispatcher rd = request.getRequestDispatcher("user_form.jsp");
+			rd.forward(request, response);
 			return;
 		}
 		
-		
-		// redirect to user list
-		response.sendRedirect("manage_user?command=LIST"); // set parameter
+		response.sendRedirect("manage_user?command=LIST");
 	}
+	
 	
 	private void deleteUser(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		Integer userId = Integer.valueOf(request.getParameter("userId"));
-		this.userService.deleteUser(userId);
+		userService.deleteUser(userId);
 		
-		// redirect to user list
-		response.sendRedirect("manage_user?command=LIST"); // set parameter
+		response.sendRedirect("manage_user?command=LIST");
 	}
-
 }
